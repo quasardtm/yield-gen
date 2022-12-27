@@ -1,18 +1,14 @@
 #![no_std]
-#![feature(generators, generator_trait)]
 #![feature(allow_internal_unstable)]
 
-pub mod __private {
-    pub use ::core::ops::{Generator, GeneratorState};
-}
-
 #[macro_export]
+#[allow_internal_unstable(generators, generator_trait)]
 macro_rules! loop_while_yield {
     ($pinned_generator:expr, $yield_match:pat => $yield_expr:expr) => {
         loop {
-            match $crate::__private::Generator::resume($pinned_generator, ()) {
-                $crate::__private::GeneratorState::Yielded($yield_match) => $yield_expr,
-                $crate::__private::GeneratorState::Complete(r) => break r,
+            match ::core::ops::Generator::resume($pinned_generator, ()) {
+                ::core::ops::GeneratorState::Yielded($yield_match) => $yield_expr,
+                ::core::ops::GeneratorState::Complete(r) => break r,
             }
         }
     };
@@ -20,9 +16,9 @@ macro_rules! loop_while_yield {
         match $init {
             mut arg => {
                 loop {
-                    arg = match $crate::__private::Generator::resume($pinned_generator, arg) {
-                        $crate::__private::GeneratorState::Yielded($yield_match) => $yield_expr,
-                        $crate::__private::GeneratorState::Complete(r) => break r,
+                    arg = match ::core::ops::Generator::resume($pinned_generator, arg) {
+                        ::core::ops::GeneratorState::Yielded($yield_match) => $yield_expr,
+                        ::core::ops::GeneratorState::Complete(r) => break r,
                     }
                 }
             }
