@@ -1,11 +1,11 @@
 #![feature(generators, generator_trait)]
-#![feature(pin_macro)]
-use core::{ops::Generator, pin::pin};
+use core::{ops::Generator};
 
 use yield_gen::{loop_while_yield, yield_pin};
 
 fn main() {
-    let mut gen = pin!(linear_updown(3., -10., 10.));
+    let mut gen = linear_updown(3., -10., 10.);
+    let mut gen = unsafe { core::pin::Pin::new_unchecked(&mut gen) };
     let over_val = loop_while_yield!(
         gen.as_mut(),
         y => {
