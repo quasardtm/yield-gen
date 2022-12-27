@@ -1,7 +1,10 @@
 #![no_std]
 #![feature(generators, generator_trait)]
+#![feature(pin_macro)]
+
 pub mod __private {
-    pub use core::ops::{Generator, GeneratorState};
+    pub use ::core::ops::{Generator, GeneratorState};
+    pub use ::core::pin::pin;
 }
 
 #[macro_export]
@@ -35,5 +38,19 @@ macro_rules! yield_gen {
     };
     ($pinned_generator:expr, $init:expr) => {
         $crate::loop_while_yield!($pinned_generator, $init, y => yield y)
+    };
+}
+
+#[macro_export]
+macro_rules! yield_pin {
+    ($generator:expr) => {
+        match $crate::__private::pin!($generator) {
+            mut gen => $crate::yield_gen!(gen.as_mut())
+        }
+    };
+    ($generator:expr, $init:expr) => {
+        match $crate::__private::pin!($generator) {
+            mut gen => $crate::yield_gen!(gen.as_mut(), $init)
+        }
     };
 }
