@@ -1,5 +1,4 @@
 #![feature(generators, generator_trait)]
-#![feature(pin_macro)]
 use core::{ops::Generator, pin::pin};
 
 use yield_gen::{loop_while_yield, yield_gen};

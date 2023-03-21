@@ -37,7 +37,6 @@ macro_rules! yield_gen {
 }
 
 #[macro_export]
-#[allow_internal_unstable(pin_macro)]
 macro_rules! yield_pin {
     ($generator:expr) => {
         match ::core::pin::pin!($generator) {
