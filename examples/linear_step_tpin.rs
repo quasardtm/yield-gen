@@ -1,6 +1,6 @@
-#![feature(generators, generator_trait)]
+#![feature(coroutines, coroutine_trait)]
 // #![feature(pin_macro)]
-use core::{ops::Generator};
+use core::{ops::Coroutine};
 
 use yield_gen::{loop_while_yield, yield_pin};
 
@@ -18,7 +18,7 @@ fn main() {
     println!("over_val : {}", over_val);
 }
 
-fn linear_step_t(a: f64, mut b: f64, threshold: f64) -> impl Generator<f64, Yield = f64, Return = f64> + Unpin {
+fn linear_step_t(a: f64, mut b: f64, threshold: f64) -> impl Coroutine<f64, Yield = f64, Return = f64> + Unpin {
     move |mut dt| {
         if a > 0. {
             b += a * dt;
@@ -40,7 +40,7 @@ fn linear_step_t(a: f64, mut b: f64, threshold: f64) -> impl Generator<f64, Yiel
     }
 }
 
-fn linear_updown(a: f64, b: f64, threshold: f64) -> impl Generator<f64, Yield = f64, Return = f64> {
+fn linear_updown(a: f64, b: f64, threshold: f64) -> impl Coroutine<f64, Yield = f64, Return = f64> {
     static move |dt| {
         let dt = yield_pin!(linear_step_t(a, b, threshold), dt);
         yield_pin!(linear_step_t(-a, threshold, b), dt)
