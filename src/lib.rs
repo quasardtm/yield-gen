@@ -39,12 +39,12 @@ macro_rules! yield_gen {
 macro_rules! yield_pin {
     ($coroutine:expr) => {
         match ::core::pin::pin!($coroutine) {
-            mut gen => $crate::yield_gen!(gen.as_mut())
+            mut cor => $crate::yield_gen!(cor.as_mut())
         }
     };
     ($coroutine:expr, $init:expr) => {
         match ::core::pin::pin!($coroutine) {
-            mut gen => $crate::yield_gen!(gen.as_mut(), $init)
+            mut cor => $crate::yield_gen!(cor.as_mut(), $init)
         }
     };
 }
