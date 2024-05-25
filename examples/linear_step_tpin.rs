@@ -19,7 +19,7 @@ fn main() {
 }
 
 fn linear_step_t(a: f64, mut b: f64, threshold: f64) -> impl Coroutine<f64, Yield = f64, Return = f64> + Unpin {
-    move |mut dt| {
+    #[coroutine] move |mut dt| {
         if a > 0. {
             b += a * dt;
             while b <= threshold {
@@ -41,7 +41,7 @@ fn linear_step_t(a: f64, mut b: f64, threshold: f64) -> impl Coroutine<f64, Yiel
 }
 
 fn linear_updown(a: f64, b: f64, threshold: f64) -> impl Coroutine<f64, Yield = f64, Return = f64> {
-    static move |dt| {
+    #[coroutine] static move |dt| {
         let dt = yield_pin!(linear_step_t(a, b, threshold), dt);
         yield_pin!(linear_step_t(-a, threshold, b), dt)
     }
