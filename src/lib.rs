@@ -1,8 +1,7 @@
 #![no_std]
-#![feature(allow_internal_unstable)]
+#![feature(coroutines, coroutine_trait)]
 
 #[macro_export]
-#[allow_internal_unstable(coroutines, coroutine_trait)]
 macro_rules! loop_while_yield {
     ($pinned_coroutine:expr, $yield_match:pat => $yield_expr:expr) => {
         loop {
@@ -27,7 +26,6 @@ macro_rules! loop_while_yield {
 }
 
 #[macro_export]
-#[allow_internal_unstable(coroutines)]
 macro_rules! yield_gen {
     ($pinned_coroutine:expr) => {
         $crate::loop_while_yield!($pinned_coroutine, y => yield y)
@@ -38,7 +36,6 @@ macro_rules! yield_gen {
 }
 
 #[macro_export]
-#[allow_internal_unstable(coroutines)]
 macro_rules! yield_pin {
     ($coroutine:expr) => {
         match ::core::pin::pin!($coroutine) {
